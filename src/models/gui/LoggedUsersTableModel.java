@@ -14,17 +14,17 @@ public class LoggedUsersTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return 2;
+        return chatClient.getLoggedUsers().size();
     }
 
     @Override
     public int getColumnCount() {
-        return 2;
+        return 1;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return chatClient.getLoggedUsers().get(rowIndex);
+        return chatClient.getLoggedUsers().get(columnIndex);
     }
 
      @Override

@@ -14,6 +14,7 @@ public class InMemoryChatClient implements ChatClient {
     private List<String> loggedUsers;
 
     private List<ActionListener> listenersLoggedUsersChanged = new ArrayList<>();
+    private List<ActionListener> listenerMessageChanged = new ArrayList<>();
 
     public InMemoryChatClient(){
         messages = new ArrayList<>();
@@ -27,15 +28,15 @@ public class InMemoryChatClient implements ChatClient {
 
     @Override
     public void login(String userName) {
-        messages.add(new Message(Message.USER_LOGGED_IN, userName));
         loggedUser = userName;
         loggedUsers.add(userName);
+        addSystemMessage(Message.USER_LOGGED_IN, userName);
         raiseEventLoggedUsersChanged();
     }
 
     @Override
     public void logout() {
-        messages.add(new Message(Message.USER_LOGGED_OUT, loggedUser));
+        addSystemMessage(Message.USER_LOGGED_OUT, loggedUser);
         loggedUsers.remove(loggedUser);
         loggedUser=null;
         raiseEventLoggedUsersChanged();
@@ -44,6 +45,7 @@ public class InMemoryChatClient implements ChatClient {
     @Override
     public void sendMessage(String text) {
         messages.add(new Message(loggedUser, text));
+        raiseEventMessagesChanged();
     }
 
     @Override
@@ -60,9 +62,25 @@ public class InMemoryChatClient implements ChatClient {
     public void addActionListenerLoggedUsersChanged(ActionListener toAdd) {
         listenersLoggedUsersChanged.add(toAdd);
     }
+    @Override
+    public void addActionListenerMessagesChanged(ActionListener toAdd){
+        listenerMessageChanged.add(toAdd);
+    }
+
     private void raiseEventLoggedUsersChanged(){
         for(ActionListener al:listenersLoggedUsersChanged){
-            al.actionPerformed(new ActionEvent(this, 1, "listenersLoggedUsersChanged"));
+            al.actionPerformed(new ActionEvent(this, 1, "userChanged"));
         }
+    }
+
+    private void raiseEventMessagesChanged(){
+        for(ActionListener al:listenerMessageChanged){
+            al.actionPerformed(new ActionEvent(this, 1, "messagesChanged"));
+        }
+    }
+
+    private void addSystemMessage(int type, String userName){
+        messages.add(new Message(type, userName));
+        raiseEventMessagesChanged();
     }
 }

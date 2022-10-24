@@ -18,13 +18,13 @@ public class Message {
 
     public Message(int type, String userName){
         if(type == USER_LOGGED_IN){
-            author = "System";
+            author = AUTHOR_SYSTEM;
             created = LocalDateTime.now();
-            text = userName + "has entered the chat";
+            text = userName + " has entered the chat\n";
 
         }
         else if(type == USER_LOGGED_OUT){
-            text = userName + "has left the chat";
+            text = userName + " has left the chat\n";
         }
     }
 
@@ -42,9 +42,10 @@ public class Message {
 
     @Override
     public String toString() {
-        if(author == AUTHOR_SYSTEM){
-
+        if(author.equals(AUTHOR_SYSTEM)){
+            return text;
         }
+
         String msg = author + " [" + created + "] ";
         msg += text + "\n";
         return  msg;

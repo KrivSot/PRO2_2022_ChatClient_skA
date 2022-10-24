@@ -51,6 +51,7 @@ public class MainFrame extends JFrame {
                     btnLogin.setText("Login");
                     txtInputName.setEditable(true);
                     txtAreaChat.setEnabled(false);
+                    txtInputMessage.setEnabled(false);
                 }
                 else{
                     String userName = txtInputName.getText();
@@ -62,6 +63,7 @@ public class MainFrame extends JFrame {
                     btnLogin.setText("Logout");
                     txtInputName.setEditable(false);
                     txtAreaChat.setEnabled(true);
+                    txtInputMessage.setEnabled(true);
                 }
             }
         });
