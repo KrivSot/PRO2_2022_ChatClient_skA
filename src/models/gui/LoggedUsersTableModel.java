@@ -5,8 +5,7 @@ import models.chatClients.ChatClient;
 import javax.swing.table.AbstractTableModel;
 
 public class LoggedUsersTableModel extends AbstractTableModel {
-
-    ChatClient chatClient;
+    private ChatClient chatClient;
 
     public LoggedUsersTableModel(ChatClient chatClient){
         this.chatClient = chatClient;
@@ -24,12 +23,11 @@ public class LoggedUsersTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return chatClient.getLoggedUsers().get(columnIndex);
+        return chatClient.getLoggedUsers().get(rowIndex);
     }
 
-     @Override
-    public String getColumnName(int column){
-        if(column == 0) return "Coll A";
-        else return "Coll B";
-     }
+    @Override
+    public String getColumnName(int column) {
+        return "User";
+    }
 }

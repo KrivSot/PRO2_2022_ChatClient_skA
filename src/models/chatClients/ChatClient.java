@@ -6,12 +6,14 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public interface ChatClient {
-    Boolean isAuthenticated();
+    void sendMessage(String text);
     void login(String userName);
     void logout();
-    void sendMessage(String text);
+    boolean isAuthenticated();
     List<String> getLoggedUsers();
     List<Message> getMessages();
+
+    List<Message> getMessage();
 
     void addActionListenerLoggedUsersChanged(ActionListener toAdd);
     void addActionListenerMessagesChanged(ActionListener toAdd);

@@ -22,7 +22,7 @@ public class InMemoryChatClient implements ChatClient {
     }
 
     @Override
-    public Boolean isAuthenticated() {
+    public boolean isAuthenticated() {
         return loggedUser!=null;
     }
 
@@ -56,6 +56,11 @@ public class InMemoryChatClient implements ChatClient {
     @Override
     public List<Message> getMessages() {
         return messages;
+    }
+
+    @Override
+    public List<Message> getMessage() {
+        return null;
     }
 
     @Override

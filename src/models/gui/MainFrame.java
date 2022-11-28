@@ -10,137 +10,145 @@ import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame {
 
-    ChatClient chatClient;
-    JButton btnLogin, btnSend;
-    JTextArea txtAreaChat;
-    JTextField txtInputName, txtInputMessage;
-    JTextArea txtChat;
+    private ChatClient chatClient;
 
-    public MainFrame(int width, int height, ChatClient chatClient){
-        super("Titul");
-        this.chatClient = chatClient;
+    JTextArea txtChat;
+    JTextField txtInputMessage;
+
+    public MainFrame(int width, int height, ChatClient chatClient) {
+        super("PRO2 2022 ChatClient skB");
         setSize(width, height);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.chatClient = chatClient;
+
         initGui();
-        pack();
+        setVisible(true);
     }
 
-    private void initGui(){
-        txtInputName = new JTextField();
+    private void initGui() {
         JPanel panelMain = new JPanel(new BorderLayout());
         panelMain.add(initLoginPanel(), BorderLayout.NORTH);
-        panelMain.add(initChatPanel(), BorderLayout.CENTER);
-        panelMain.add(initLoggedUsersPanel(), BorderLayout.EAST);
-        panelMain.add(initMessagePanel(), BorderLayout.SOUTH);
-
+        panelMain.add(initChatPanel(),BorderLayout.CENTER);
+        panelMain.add(initMessagePanel(),BorderLayout.SOUTH);
+        panelMain.add(initLoggedUsersPanel(),BorderLayout.EAST);
         add(panelMain);
     }
-
-    private JPanel initLoginPanel(){
-        JPanel panelLogin = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelLogin.add(new JLabel("username"));
-        panelLogin.add(txtInputName);
-        JButton btnLogin = new JButton();
-
+    private JPanel initLoginPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panel.add(new JLabel("Username"));
+        JTextField txtInputUsername = new JTextField("",30);
+        panel.add(txtInputUsername);
+        JButton btnLogin = new JButton("Login");
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Button login clicked - " + txtInputName.getText());
-                if(chatClient.isAuthenticated()){
+                String userName = txtInputUsername.getText();
+                System.out.println("clicked - " + userName);
+                if (chatClient.isAuthenticated()){
+                    //logout
                     chatClient.logout();
                     btnLogin.setText("Login");
-                    txtInputName.setEditable(true);
-                    txtAreaChat.setEnabled(false);
+                    txtInputUsername.setEditable(true);
+                    txtChat.setEnabled(false);
                     txtInputMessage.setEnabled(false);
-                }
-                else{
-                    String userName = txtInputName.getText();
-                    if(userName.length()<1){
-                        JOptionPane.showMessageDialog(null, "Enter your username", "Chyba", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    //login
+                    if (userName.length()<1) {
+                        JOptionPane.showMessageDialog(null, "Enter you username","Error", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
                     chatClient.login(userName);
                     btnLogin.setText("Logout");
-                    txtInputName.setEditable(false);
-                    txtAreaChat.setEnabled(true);
+                    txtInputUsername.setEditable(false);
+                    txtChat.setEnabled(true);
                     txtInputMessage.setEnabled(true);
                 }
             }
         });
+        panel.add(btnLogin);
 
-        txtInputName = new JTextField("",30);
-        panelLogin.add(btnLogin);
-
-        return panelLogin;
+        return panel;
     }
 
-    private JPanel initChatPanel(){
-        JPanel panelChat = new JPanel();
-        panelChat.setLayout(new BoxLayout(panelChat, BoxLayout.X_AXIS));
-        txtAreaChat = new JTextArea();
-        txtAreaChat.setAutoscrolls(true);
-        txtAreaChat.setEditable(false);
-        JScrollPane scrollPane = new JScrollPane(txtAreaChat);
-        panelChat.add(scrollPane);
-        return panelChat;
-    }
+    private JPanel initChatPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel,BoxLayout.X_AXIS));
+        txtChat = new JTextArea();
+        txtChat.setEditable(false);
+        txtChat.setEnabled(false);
+        JScrollPane scrollPane = new JScrollPane(txtChat);
+        panel.add(scrollPane);
 
-    private JPanel initMessagePanel(){
-        JPanel panelMessage = new JPanel();
-        txtInputMessage = new JTextField("", 50);
-        panelMessage.add(txtInputMessage);
-        btnSend = new JButton("Pošli");
-        btnSend.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = txtInputMessage.getText();
-                if(text.length()==0){
-                    return;
-                }
-                if(!chatClient.isAuthenticated()){
-                    return;
-                }
-                chatClient.sendMessage(text);
-                txtInputMessage.setText("");
-                refreshMessages();
-            }
+        /*for (int i = 0; i < 50; i++) {
+            txtChat.append("Message: " + i + "\n");
+        }*/
+        chatClient.addActionListenerMessagesChanged(e -> {
+            refreshMessages();
         });
-        panelMessage.add(btnSend);
-        return panelMessage;
+
+        return panel;
     }
 
     private JPanel initLoggedUsersPanel() {
         JPanel panel = new JPanel();
 
-        /*Object[][] data = new Object [][]{
-                {"1,1","1,2"},
-                {"2,1","2,2"},
-                {"safdsgd","fdhjh"},
-        };*/
+        /*Object[][] data = new Object[][]{
+                {"0,0","0,1"},
+                {"1,0","1,1"},
+                {"aaa","bbb"}
+        };
+        String[] colNames = new String[]{"Col1", "Col2"};
+
+        JTable tblLoggedUsers = new JTable(data, colNames); */
 
         JTable tblLoggedUsers = new JTable();
-
-        LoggedUsersTableModel loggedUsersTableModel = new LoggedUsersTableModel(this.chatClient);
+        LoggedUsersTableModel loggedUsersTableModel = new LoggedUsersTableModel(chatClient);
         tblLoggedUsers.setModel(loggedUsersTableModel);
+
+        JScrollPane scrollPane = new JScrollPane(tblLoggedUsers);
+        scrollPane.setPreferredSize(new Dimension(250,500));
+        panel.add(scrollPane);
 
         chatClient.addActionListenerLoggedUsersChanged(e -> {
             loggedUsersTableModel.fireTableDataChanged();
         });
 
-        JScrollPane scrollPane = new JScrollPane(tblLoggedUsers);
-        scrollPane.setPreferredSize(new Dimension(250,500));
-        panel.add(scrollPane);
         return panel;
     }
 
+    private JPanel initMessagePanel(){
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        txtInputMessage = new JTextField("",50);
+        txtInputMessage.setEnabled(false);
+        panel.add(txtInputMessage);
+        JButton btnSendMessage = new JButton("Send");
+        btnSendMessage.addActionListener(e -> {
+            String msgText = txtInputMessage.getText();
+            System.out.println("btn send clicked - " + msgText);
+
+            //txtChat.append(txtInputMessage.getText() + "\n");
+
+            if (msgText.length() == 0) {
+                return;
+            }
+            if (!chatClient.isAuthenticated()) {
+                return;
+            }
+            chatClient.sendMessage(msgText);
+            txtInputMessage.setText("");
+            refreshMessages();
+        });
+        panel.add(btnSendMessage);
+
+        return panel;
+    }
     private void refreshMessages(){
-        if(!chatClient.isAuthenticated()) return;
-
-        txtAreaChat.setText("");
-
-        for(Message msg: chatClient.getMessages()){
-            txtAreaChat.append(msg.toString());
-            txtAreaChat.append("\n");
+        if (!chatClient.isAuthenticated())
+            return;
+        for (Message msg:
+             chatClient.getMessage()) {
+            txtChat.append(msg.toString());
+            txtChat.append("\n");
         }
     }
 }
