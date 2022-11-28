@@ -7,6 +7,10 @@ import models.chatClients.fileOperations.JsonChatFileOperations;
 import models.database.DbInitializer;
 import models.gui.MainFrame;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         String databaseDriver = "org.apache.derby.jdbc.EmbeddedDriver";
@@ -17,6 +21,15 @@ public class Main {
 
         ChatFileOperations chatFileOperations = new JsonChatFileOperations();
         ChatClient chatClient = new ApiChatClient();
+
+        Class<ApiChatClient> reflectionExample = ApiChatClient.class;
+        List<Field> field  = getAllField(reflectionExample);
+
+        System.out.println("Class name: "+reflectionExample.getSimpleName()+ " | "+reflectionExample.getName());
+
+        for(Field f : field){
+            System.out.println(f.getName()+" : "+f.getType());
+        }
 
         MainFrame window = new MainFrame(800,600, chatClient);
 
@@ -34,5 +47,13 @@ public class Main {
 
         client.logout();
 
+    }
+
+    private static List<Field> getAllField(Class<?> cls){
+        List<Field> fieldList = new ArrayList<>();
+        for(Field f : cls.getDeclaredFields()){
+            fieldList.add(f);
+        }
+        return fieldList;
     }
 }
