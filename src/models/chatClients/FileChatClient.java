@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileChatClient implements ChatClient{
+public class FileChatClient implements  ChatClient{
     private String loggedUser;
     private List<String> loggedUsers;
     private List<Message> messages;
@@ -59,11 +59,6 @@ public class FileChatClient implements ChatClient{
     @Override
     public List<String> getLoggedUsers() {
         return loggedUsers;
-    }
-
-    @Override
-    public List<Message> getMessages() {
-        return null;
     }
 
     @Override

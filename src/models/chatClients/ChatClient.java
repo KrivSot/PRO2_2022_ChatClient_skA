@@ -11,8 +11,6 @@ public interface ChatClient {
     void logout();
     boolean isAuthenticated();
     List<String> getLoggedUsers();
-    List<Message> getMessages();
-
     List<Message> getMessage();
 
     void addActionListenerLoggedUsersChanged(ActionListener toAdd);
