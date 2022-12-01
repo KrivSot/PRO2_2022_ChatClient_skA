@@ -12,9 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+    //Hlavni trida, ta se spousti
     public static void main(String[] args) {
         String databaseDriver = "org.apache.derby.jdbc.EmbeddedDriver";
-        String databaseUrl = "jdbc:derby:ChatClientDb_skB";
+        String databaseUrl = "jdbc:derby:ChatClientDb_skA";
 
         DbInitializer dbInitializer = new DbInitializer(databaseDriver, databaseUrl);
         dbInitializer.init(); // 2. run this mian

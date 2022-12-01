@@ -3,6 +3,7 @@ package models.database;
 import models.Message;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcDatabaseOperations implements DataBaseOperations{
@@ -34,6 +35,22 @@ public class JdbcDatabaseOperations implements DataBaseOperations{
 
     @Override
     public List<Message> getMessage() {
+        try {
+            String sql = "SELECT * from ChatMessages;";
+            ResultSet rst;
+            Statement statement = connection.createStatement();
+            rst = statement.executeQuery(sql);
+            statement.close();
+            ArrayList<Message> messages = new ArrayList<>();
+            while (rst.next()) {
+                Message msg = new Message(rst.getString("author"), rst.getString("text"));
+                messages.add(msg);
+            }
+            return messages;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

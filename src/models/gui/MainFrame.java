@@ -16,7 +16,7 @@ public class MainFrame extends JFrame {
     JTextField txtInputMessage;
 
     public MainFrame(int width, int height, ChatClient chatClient) {
-        super("PRO2 2022 ChatClient skB");
+        super("PRO2 2022 ChatClient skA");
         setSize(width, height);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.chatClient = chatClient;

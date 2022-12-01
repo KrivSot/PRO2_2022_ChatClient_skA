@@ -24,7 +24,7 @@ public class DbInitializer {
                         + " CONSTRAINT ChatMessages_PK PRIMARY KEY,"
                     + "author varchar(50), "
                     + "text varchar(1000), "
-                    + "created timestamp)";
+                    + "created timestamp);";
 
             Statement statement = conn.createStatement();
             statement.executeUpdate(sql);

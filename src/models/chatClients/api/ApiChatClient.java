@@ -185,7 +185,7 @@ public class ApiChatClient implements ChatClient {
             if(response.getStatusLine().getStatusCode() == 200){
                 String resultJson = EntityUtils.toString(response.getEntity());
 
-                loggedUser = gson.fromJson(
+                loggedUsers = gson.fromJson(
                         resultJson,
                         new TypeToken<ArrayList<String>>(){}.getType()
                 );
