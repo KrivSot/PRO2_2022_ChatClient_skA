@@ -143,10 +143,10 @@ public class MainFrame extends JFrame {
         return panel;
     }
     private void refreshMessages(){
+        txtChat.setText(""); //Vycisti textArea aby se nevypisoval text nekolikrat
         if (!chatClient.isAuthenticated())
             return;
-        for (Message msg:
-             chatClient.getMessage()) {
+        for (Message msg: chatClient.getMessage()) {
             txtChat.append(msg.toString());
             txtChat.append("\n");
         }

@@ -27,9 +27,9 @@ public class Message {
         this.author = AUTHOR_SYSTEM;
         this.created = LocalDateTime.now();
         if (type == USER_LOGGED_IN) {
-            text = username; //todo
+            text = username;
         } else if (type == USER_LOGGED_OUT) {
-            text = username; //todo
+            text = username;
         }
     }
 
